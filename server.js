@@ -1,6 +1,7 @@
 'use strict';
 const express = require('express');
 const dns = require('dns');
+const url = require('url');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const app = express();
@@ -29,19 +30,22 @@ app.get('/', function(req, res){
 // @desc    add new url
 // @access  Public
 app.post("/api/shorturl/new", function (req, res){
+
   //get the url
-  let url = req.body.url;
-  //remove the 'http' from the url to validate the url
-  url = url.replace(/^https?:\/\//i, '')
+  let parsedUrl = url.parse(req.body.url).hostname;
+  // //remove the 'http' from the url to validate the url
+  // url = url.replace(/^https?:\/\//i, '')
+
   // validate the url with dns.lookup if the url is not valid, 
   // will return a error message in json format
-  dns.lookup(url, err => {
-    if (err && err.code === 'ENOTFOUND') {
-      res.json({ "error": "invalid URL" });
+  dns.lookup(parsedUrl, (err, addresses, family) => {
+    if(addresses == undefined){
+      console.log("error invalid URL");
     }
   });
 
-  res.json({'url' : url});
+
+  res.json({'url' : parsedUrl});
 
 });
 
