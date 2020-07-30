@@ -1,6 +1,6 @@
 'use strict';
 const express = require('express');
-const url = require("url");
+const dns = require('dns');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const app = express();
@@ -30,15 +30,16 @@ app.get('/', function(req, res){
 // @access  Public
 app.post("/api/shorturl/new", function (req, res){
   //get the url
-  let u = req.body.url;
-  // parse the url for validation
-  var result = url.parse(u);
-  // if the given url not valid, return a error message in json format
-  if(result.hostname == null){
-    res.json({ "error": "invalid URL" });
-  }
-
-
+  let url = req.body.url;
+  //remove the 'http' from the url to validate the url
+  url = url.replace(/^https?:\/\//i, '')
+  // validate the url with dns.lookup if the url is not valid, 
+  // will return a error message in json format
+  dns.lookup(url, err => {
+    if (err && err.code === 'ENOTFOUND') {
+      res.json({ "error": "invalid URL" });
+    }
+  });
 
   res.json({'url' : url});
 
