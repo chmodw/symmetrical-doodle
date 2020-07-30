@@ -7,7 +7,7 @@ var cors = require('cors');
 var app = express();
 
 // Basic Configuration 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 4000;
 
 //connect with the database
 connectDB();

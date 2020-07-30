@@ -28,7 +28,6 @@
   ],
   "license": "MIT",
   "author": "chamodya wimansha",
-  
   "devDependencies": {
     "nodemon": "^2.0.4"
   }
