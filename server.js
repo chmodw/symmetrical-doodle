@@ -1,14 +1,11 @@
 'use strict';
-var express = require('express');
+const express = require('express');
+const url = require("url");
 const connectDB = require('./config/db');
-
-var cors = require('cors');
-
-var app = express();
-
+const cors = require('cors');
+const app = express();
 // Basic Configuration 
-var port = process.env.PORT || 4000;
-
+const port = process.env.PORT || 4000;
 //connect with the database
 connectDB();
 
@@ -16,6 +13,11 @@ app.use(cors());
 
 /** this project needs to parse POST bodies **/
 // you should mount the body-parser here
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
@@ -23,10 +25,23 @@ app.get('/', function(req, res){
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
-  
-// your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+// @route   POST api/shorturl/new
+// @desc    add new url
+// @access  Public
+app.post("/api/shorturl/new", function (req, res){
+  //get the url
+  let u = req.body.url;
+  // parse the url for validation
+  var result = url.parse(u);
+  // if the given url not valid, return a error message in json format
+  if(result.hostname == null){
+    res.json({ "error": "invalid URL" });
+  }
+
+
+
+  res.json({'url' : url});
+
 });
 
 
