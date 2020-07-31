@@ -5,6 +5,8 @@ const url = require('url');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const app = express();
+const ShortUrlModel = require('./models/shorturl')
+
 // Basic Configuration 
 const port = process.env.PORT || 8000;
 //connect with the database
@@ -30,21 +32,37 @@ app.get('/', function (req, res) {
 // @desc    add new url
 // @access  Public
 app.post("/api/shorturl/new", function (req, res) {
-  
+
   //get the url
   let parsedUrl = url.parse(req.body.url).hostname;
   // validate the url with dns.lookup if the url is not valid, 
   // will return a error message in json format
   dns.lookup(parsedUrl, (err, addresses, family) => {
-    if(addresses == null){
-      res.json({'error' : 'invalid url'});
-    }else{
-      res.json({'url' : parsedUrl});
+    if (addresses == null) {
+      // return an error if the url is not valid
+      res.json({
+        'error': 'invalid url'
+      });
+    } else {
+      // add the url to the database if the url is valid
+
+
+
+
+
+
     }
   });
 
 });
 
+function SaveUrl(shortUrl) {
+  // create an instance of the new url
+  let shortUrl = new ShortUrlModel({
+    
+  });
+}
+
 app.listen(port, function () {
   console.log('Node.js listening ...');
-});  
+});
