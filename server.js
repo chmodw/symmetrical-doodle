@@ -5,7 +5,7 @@ const url = require('url');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const app = express();
-const ShortUrlModel = require('./models/shorturl')
+const ShortUrlModel = require('./models/shorturl');
 
 // Basic Configuration 
 const port = process.env.PORT || 8000;
@@ -45,10 +45,13 @@ app.post("/api/shorturl/new", function (req, res) {
       });
     } else {
       // add the url to the database if the url is valid
+      
+      
+      let shortUrl = new ShortUrlModel({
+        url: shortUrl
+      });
 
-
-
-
+      
 
 
     }
@@ -56,12 +59,12 @@ app.post("/api/shorturl/new", function (req, res) {
 
 });
 
-function SaveUrl(shortUrl) {
-  // create an instance of the new url
-  let shortUrl = new ShortUrlModel({
-    
-  });
-}
+// function SaveUrl(shortUrl) {
+//   // create an instance of the new url
+//   let shortUrl = new ShortUrlModel({
+//     url: shortUrl,
+//   });
+// }
 
 app.listen(port, function () {
   console.log('Node.js listening ...');
