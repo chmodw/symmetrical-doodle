@@ -15,7 +15,7 @@
     "jshint": "^2.11.2",
     "mongodb": "^3.3.3",
     "mongoose": "^5.7.7",
-    "validator": "^13.1.1"
+    "validator": "^13.7.0"
   },
   "engines": {
     "node": "10.17.0"
